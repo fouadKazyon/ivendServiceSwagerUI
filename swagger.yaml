@@ -58,7 +58,7 @@ paths:
                       maxLength: 8
                       shownInUI: true
                     
-                    - name: voucherType
+                    - name: codeType
                       type: string
                       minLength: 5
                       maxLength: 15
@@ -79,7 +79,7 @@ paths:
                         maxLength: 20
                         shownInUI: true
                         
-                      - name: voucherType
+                      - name: codeType
                         type: string
                         minLength: 5
                         maxLength: 15
