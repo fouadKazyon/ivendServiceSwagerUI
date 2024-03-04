@@ -2,7 +2,9 @@ openapi: 3.0.3
 info:
   title: Kazyon Services for iVend
   description: |-
-    This API's will be used by iVend to integrate Kazyon services (there is an API that will get the list of services) and will be cached for 24 hours and will be retrieved daily to get any new updates on the list of services.
+    This project is consist of 2 API's, and they will be used by iVend to integrate with Kazyon (Coupon and Voucher) Services, one of them is concerned to get all the needed information about the available service and the other one is concernded to validate how on validating the user eligibility for a specific Coupon or Voucher. 
+    <br> <h2> The first API (Get Service) </h2> will be called on each start up for any POS machine or every 24 hours to enable bandwith and caching capabilities. This will save a lot of calls and bandwith consumtion.
+    <br> <h2> The second API (Post eligibility) </h2> will be called to validate the user eligibility for a coupon or a voucher, and it will get the rquired coupon or voucher information, ex: percentage of discount, maximum discount amount, and minimum receipt value ... etc.  
   
   contact:
     email: mohamed.nasr@kazyon.com
@@ -11,7 +13,7 @@ servers:
   - url: will be available soon...
 tags:
   - name: service
-    description: Everything about getting available services, validating user eligibility, discount conditions, vouchers details ... etc 
+    description: Everything about getting available services, validating user eligibility, discount conditions, vouchers details and so on.
 
     
     
@@ -38,6 +40,7 @@ paths:
                   $ref: '#/components/schemas/servicesInfo'
                 example:
                   - serviceProvider: orange
+                    codeType: coupon
                     attributes:
                     - name: mobileNumber
                       type: string
@@ -58,20 +61,41 @@ paths:
                       maxLength: 8
                       shownInUI: true
                     
-                    - name: codeType
+                  
+                      
+                  - serviceProvider: orange
+                    codeType: voucher
+                    attributes:
+                    - name: mobileNumber
                       type: string
-                      minLength: 5
-                      maxLength: 15
-                      shownInUI: false
+                      minLength: 11
+                      maxLength: 11
+                      shownInUI: true
+                      regexValidation: '^01\d{9}$'
+                      
+                    - name: code
+                      type: string
+                      minLength: 4
+                      maxLength: 20
+                      shownInUI: true
+                      
+                    - name: otp
+                      type: number
+                      minLength: 6
+                      maxLength: 8
+                      shownInUI: true
+                    
+                    
                       
                   - serviceProvider: vodafone
+                    codeType: voucher
                     attributes:
                       - name: mobileNumber
                         type: string
                         minLength: 11
                         maxLength: 11
                         shownInUI: true
-                        validation: '^01\d{9}$'
+                        regexValidation: '^01\d{9}$'
                         
                       - name: code
                         type: string
@@ -79,11 +103,7 @@ paths:
                         maxLength: 20
                         shownInUI: true
                         
-                      - name: codeType
-                        type: string
-                        minLength: 5
-                        maxLength: 15
-                        shownInUI: false
+                      
                         
                         
                   
@@ -97,7 +117,7 @@ paths:
        - service
       summary: check wether the user is eligible to use an offer or validate a coupon code
       description: This service will be called with every transaction including voucher or coupon to validate the user's eligabilty to reedem the code
-      operationId: getUserEligibility
+      operationId: checkUserEligibility
       parameters:
         - $ref: '#/components/parameters/storeCode'
         - $ref: '#/components/parameters/storePassword'
@@ -148,13 +168,19 @@ components:
     eligibilityRequest:
       type: object
       properties:
-      
         serviceProvider:
           type: string
           enum:
               - vodafone
               - orange
               - etisalat
+              - meeza
+        codeType:
+          type: string 
+          description: it can be "voucher" or "coupon"
+          enum:
+            - voucher
+            - coupon
         mobileNumber:
           type: string
           example: "01234567899"
@@ -164,21 +190,16 @@ components:
         otp:
           type: string
           example: "123456"
-        codeType:
-          type: string 
-          description: it can be "voucher" or "coupon"
-          enum:
-            - voucher
-            - coupon
+        
         
     eligibiltyResponse:
       type: object
       properties:
-        isValid:
+        isEligibile:
           type: boolean
           description: it's a flag to tell if the user is eligable to reedem the code or not
           example: true
-        voucherType:
+        couponOrVoucherKind:
           type: string
           description:  it describes the meaning of the value contained in discountValue it can be one of those values "voucherValue", "discountPercentage", "bounsBuyGroup" or "couponValue"
           example: "voucherValue || discountPercentage || couponValue || bounsBuyGroup"
@@ -192,12 +213,13 @@ components:
           example: 250
         discountValue:
           type: string
-          description: can hold one of those 4 values types accornding to the type mentioned in voucherType
+          description: can hold one of those 4 values types accornding to the type mentioned in couponOrVoucherKind
           example: "10 || 0.4 || 0.65 || bonusBuyGroup1"
         loyaltyEligibilityPercent:
           type: number
           example: 0.55 || 0.65 || 0.80
           description: should be a fraction value between 0.0 to 1.0 
+    
     servicesInfo:
         type: object
         properties:
@@ -207,15 +229,21 @@ components:
                   - vodafone
                   - orange
                   - etisalat
+                  - meeza
             example: orange
+          codeType:
+            type: string 
+            description: it can be "voucher" or "coupon"
+            enum:
+              - voucher
+              - coupon
+            example: coupon
           attributes:
             type: array
             items:
               type: object
               properties:
                 name:
-                  type: string
-                voucherType:
                   type: string
                 minLength:
                   type: number
