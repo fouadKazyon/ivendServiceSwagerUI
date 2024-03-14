@@ -41,6 +41,8 @@ paths:
                 example:
                   - serviceProvider: orange
                     codeType: coupon
+                    beautyName: Orange coupon
+                    icon: <icon_path>
                     attributes:
                     - name: mobileNumber
                       type: string
@@ -48,23 +50,28 @@ paths:
                       maxLength: 11
                       shownInUI: true
                       regexValidation: '^01\d{9}$'
+                      beautyName: رقم المحمول
                       
                     - name: code
                       type: string
                       minLength: 4
                       maxLength: 20
                       shownInUI: true
+                      beautyName: الكود
                       
                     - name: otp
                       type: number
                       minLength: 6
                       maxLength: 8
                       shownInUI: true
+                      beautyName: رمز التحقق
                     
                   
                       
                   - serviceProvider: orange
                     codeType: voucher
+                    beautyName: Orange Voucher
+                    icon: <icon_path>
                     attributes:
                     - name: mobileNumber
                       type: string
@@ -72,23 +79,28 @@ paths:
                       maxLength: 11
                       shownInUI: true
                       regexValidation: '^01\d{9}$'
+                      beautyName: رقم المحمول
                       
                     - name: code
                       type: string
                       minLength: 4
                       maxLength: 20
                       shownInUI: true
+                      beautyName: الكود
+
                       
                     - name: otp
                       type: number
                       minLength: 6
                       maxLength: 8
                       shownInUI: true
-                    
+                      beautyName: رمز التحقق
                     
                       
                   - serviceProvider: vodafone
                     codeType: voucher
+                    beautyName: Vodafone Voucher
+                    icon: <icon_path>
                     attributes:
                       - name: mobileNumber
                         type: string
@@ -96,16 +108,14 @@ paths:
                         maxLength: 11
                         shownInUI: true
                         regexValidation: '^01\d{9}$'
+                        beautyName: رقم المحمول
                         
                       - name: code
                         type: string
                         minLength: 4
                         maxLength: 20
-                        shownInUI: true
-                        
-                      
-                        
-                        
+                        beautyName: الكود
+
                   
                   
         '401':
@@ -238,6 +248,13 @@ components:
               - voucher
               - coupon
             example: coupon
+          beautyName:
+            type: string 
+            description: name to be displayed in UI
+            example: Orange
+          icon:
+            type: string 
+            description: icon path for the service
           attributes:
             type: array
             items:
@@ -252,6 +269,8 @@ components:
                 shownInUI:
                   type: boolean
                 regexValidation:
+                  type: string
+                beautyName:
                   type: string
         
    
