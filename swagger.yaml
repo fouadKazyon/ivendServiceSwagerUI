@@ -41,7 +41,7 @@ paths:
                 example:
                   - serviceProvider: orange
                     codeType: coupon
-                    beautyName: Orange coupon
+                    displayName: Orange coupon
                     icon: <icon_path>
                     attributes:
                     - name: mobileNumber
@@ -50,27 +50,27 @@ paths:
                       maxLength: 11
                       shownInUI: true
                       regexValidation: '^01\d{9}$'
-                      beautyName: رقم المحمول
+                      displayName: رقم المحمول
                       
                     - name: code
                       type: string
                       minLength: 4
                       maxLength: 20
                       shownInUI: true
-                      beautyName: الكود
+                      displayName: الكود
                       
                     - name: otp
                       type: number
                       minLength: 6
                       maxLength: 8
                       shownInUI: true
-                      beautyName: رمز التحقق
+                      displayName: رمز التحقق
                     
                   
                       
                   - serviceProvider: orange
                     codeType: voucher
-                    beautyName: Orange Voucher
+                    displayName: Orange Voucher
                     icon: <icon_path>
                     attributes:
                     - name: mobileNumber
@@ -79,14 +79,14 @@ paths:
                       maxLength: 11
                       shownInUI: true
                       regexValidation: '^01\d{9}$'
-                      beautyName: رقم المحمول
+                      displayName: رقم المحمول
                       
                     - name: code
                       type: string
                       minLength: 4
                       maxLength: 20
                       shownInUI: true
-                      beautyName: الكود
+                      displayName: الكود
 
                       
                     - name: otp
@@ -94,12 +94,12 @@ paths:
                       minLength: 6
                       maxLength: 8
                       shownInUI: true
-                      beautyName: رمز التحقق
+                      displayName: رمز التحقق
                     
                       
                   - serviceProvider: vodafone
                     codeType: voucher
-                    beautyName: Vodafone Voucher
+                    displayName: Vodafone Voucher
                     icon: <icon_path>
                     attributes:
                       - name: mobileNumber
@@ -108,13 +108,13 @@ paths:
                         maxLength: 11
                         shownInUI: true
                         regexValidation: '^01\d{9}$'
-                        beautyName: رقم المحمول
+                        displayName: رقم المحمول
                         
                       - name: code
                         type: string
                         minLength: 4
                         maxLength: 20
-                        beautyName: الكود
+                        displayName: الكود
 
                   
                   
@@ -205,10 +205,18 @@ components:
     eligibiltyResponse:
       type: object
       properties:
-        isEligibile:
-          type: boolean
-          description: it's a flag to tell if the user is eligable to reedem the code or not
-          example: true
+        status:
+           type: string
+           enum:
+                  - availableToUse
+                  - alreadyUsed
+                  - notEligible
+           example: "notEligible  || alreadyUsed ||  availableToUse"
+           description: it's a enum to have status of check eligiblity  it can be (availableToUse -> user can use discount), (alreadyUsed -> this voucher or coupon already used before) or (notEligible -> voucher or coupon not valid)
+        
+        statusMessage:
+          type: string
+          example: " يمكنك استخدام هذا الكود  ||   تم استخدام الكود من قبل  ||    هذا الكود غير صالح للاستخدام "
         couponOrVoucherKind:
           type: string
           description:  it describes the meaning of the value contained in discountValue it can be one of those values "voucherValue", "discountPercentage", "bounsBuyGroup" or "couponValue"
@@ -248,7 +256,7 @@ components:
               - voucher
               - coupon
             example: coupon
-          beautyName:
+          displayName:
             type: string 
             description: name to be displayed in UI
             example: Orange
@@ -270,7 +278,7 @@ components:
                   type: boolean
                 regexValidation:
                   type: string
-                beautyName:
+                displayName:
                   type: string
         
    
