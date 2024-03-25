@@ -43,6 +43,7 @@ paths:
                     codeType: coupon
                     displayName: Orange coupon
                     icon: <icon_path>
+                    isPresist: true
                     attributes:
                     - name: mobileNumber
                       type: string
@@ -51,6 +52,7 @@ paths:
                       shownInUI: true
                       regexValidation: '^01\d{9}$'
                       displayName: رقم المحمول
+                      isPresist: false
                       
                     - name: code
                       type: string
@@ -58,35 +60,7 @@ paths:
                       maxLength: 20
                       shownInUI: true
                       displayName: الكود
-                      
-                    - name: otp
-                      type: number
-                      minLength: 6
-                      maxLength: 8
-                      shownInUI: true
-                      displayName: رمز التحقق
-                    
-                  
-                      
-                  - serviceProvider: orange
-                    codeType: voucher
-                    displayName: Orange Voucher
-                    icon: <icon_path>
-                    attributes:
-                    - name: mobileNumber
-                      type: string
-                      minLength: 11
-                      maxLength: 11
-                      shownInUI: true
-                      regexValidation: '^01\d{9}$'
-                      displayName: رقم المحمول
-                      
-                    - name: code
-                      type: string
-                      minLength: 4
-                      maxLength: 20
-                      shownInUI: true
-                      displayName: الكود
+                      isPresist: true
 
                       
                     - name: otp
@@ -95,12 +69,49 @@ paths:
                       maxLength: 8
                       shownInUI: true
                       displayName: رمز التحقق
-                    
+                      isPresist: false
+
+                  
+                      
+                  - serviceProvider: orange
+                    codeType: voucher
+                    displayName: Orange Voucher
+                    icon: <icon_path>
+                    isPresist: true
+                    attributes:
+                    - name: mobileNumber
+                      type: string
+                      minLength: 11
+                      maxLength: 11
+                      shownInUI: true
+                      regexValidation: '^01\d{9}$'
+                      displayName: رقم المحمول
+                      isPresist: false
+
+                      
+                    - name: code
+                      type: string
+                      minLength: 4
+                      maxLength: 20
+                      shownInUI: true
+                      displayName: الكود
+                      isPresist: true
+
+                      
+                    - name: otp
+                      type: number
+                      minLength: 6
+                      maxLength: 8
+                      shownInUI: true
+                      displayName: رمز التحقق
+                      isPresist: false
+
                       
                   - serviceProvider: vodafone
                     codeType: voucher
                     displayName: Vodafone Voucher
                     icon: <icon_path>
+                    isPresist: true
                     attributes:
                       - name: mobileNumber
                         type: string
@@ -109,12 +120,16 @@ paths:
                         shownInUI: true
                         regexValidation: '^01\d{9}$'
                         displayName: رقم المحمول
+                        isPresist: true
+
                         
                       - name: code
                         type: string
                         minLength: 4
                         maxLength: 20
                         displayName: الكود
+                        isPresist: true
+
 
                   
                   
@@ -256,6 +271,9 @@ components:
               - voucher
               - coupon
             example: coupon
+          isPresist:
+            type: boolean 
+            description: it it's a boolean to describe if this attribute will be a part of the unique identifier to be saved in database ex. if both serviceProvider and code are assigned true it should be sorted "serviceProvider#code"-> "orange#894566"
           displayName:
             type: string 
             description: name to be displayed in UI
@@ -280,5 +298,8 @@ components:
                   type: string
                 displayName:
                   type: string
+                isPresist:
+                  type: boolean
+                  description: it it's a boolean to describe if this attribute will be a part of the unique identifier to be saved in database ex. if both serviceProvider and code are assigned true it should be sorted "serviceProvider#code"-> "orange#894566"
         
    
