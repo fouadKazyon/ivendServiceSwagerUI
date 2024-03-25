@@ -223,11 +223,11 @@ components:
         status:
            type: string
            enum:
-                  - availableToUse
-                  - alreadyUsed
-                  - notEligible
-           example: "notEligible  || alreadyUsed ||  availableToUse"
-           description: it's a enum to have status of check eligiblity  it can be (availableToUse -> user can use discount), (alreadyUsed -> this voucher or coupon already used before) or (notEligible -> voucher or coupon not valid)
+                  - Eligible
+                  - AlreadyUsed
+                  - NotEligible
+           example: "NotEligible  || AlreadyUsed ||  Eligible"
+           description: it's a enum to have status of check eligiblity  it can be (Eligible -> : user eligible to use this code), (alreadyUsed -> : code used before.) or (notEligible -> : user  not eligible to use this code.)
         
         statusMessage:
           type: string
@@ -273,7 +273,7 @@ components:
             example: coupon
           isPresist:
             type: boolean 
-            description: it it's a boolean to describe if this attribute will be a part of the unique identifier to be saved in database ex. if both serviceProvider and code are assigned true it should be sorted "serviceProvider#code"-> "orange#894566"
+            description: it it's a boolean to describe if this attribute will be a part of the unique identifier to be saved in Ivend database. so we can access the receipt Information ex. if both serviceProvider and code are assigned true it should be stored "serviceProvider#code"-> "orange#894566"
           displayName:
             type: string 
             description: name to be displayed in UI
