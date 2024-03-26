@@ -5,7 +5,7 @@ info:
     This project is consist of 2 API's, and they will be used by iVend to integrate with Kazyon (Coupon and Voucher) Services, one of them is concerned to get all the needed information about the available service and the other one is concernded to validate how on validating the user eligibility for a specific Coupon or Voucher. 
     <br> <h2> The first API (Get Service) </h2> will be called on each start up for any POS machine or every 24 hours to enable bandwith and caching capabilities. This will save a lot of calls and bandwith consumtion.
     <br> <h2> The second API (Post eligibility) </h2> will be called to validate the user eligibility for a coupon or a voucher, and it will get the rquired coupon or voucher information, ex: percentage of discount, maximum discount amount, and minimum receipt value ... etc.  
-  
+
   contact:
     email: mohamed.nasr@kazyon.com
   version: 1.0.01
@@ -15,8 +15,8 @@ tags:
   - name: service
     description: Everything about getting available services, validating user eligibility, discount conditions, vouchers details and so on.
 
-    
-    
+
+
 paths:
   /service:
     get:
@@ -28,7 +28,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/storeCode'
         - $ref: '#/components/parameters/storePassword'
-      
+
       responses:
         '200':
           description: successful operation
@@ -36,140 +36,152 @@ paths:
             application/json:
               schema:
                 type: array
-                items: 
+                items:
                   $ref: '#/components/schemas/servicesInfo'
                 example:
                   - serviceProvider: orange
-                    codeType: coupon
-                    displayName: Orange coupon
-                    icon: <icon_path>
-                    isPersist: true
-                    attributes:
-                    - name: mobileNumber
-                      type: string
-                      minLength: 11
-                      maxLength: 11
-                      shownInUI: true
-                      regexValidation: '^01\d{9}$'
-                      displayName: رقم المحمول
-                      isPersist: false
-                      
-                    - name: code
-                      type: string
-                      minLength: 4
-                      maxLength: 20
-                      shownInUI: true
-                      displayName: الكود
-                      isPersist: true
+                    coupons:
+                      - serviceId: orangeCoupon200
+                        displayName: Orange coupon 200
+                        icon: <icon_path>
+                        attributes:
+                          - name: mobileNumber
+                            type: string
+                            minLength: 11
+                            maxLength: 11
+                            shownInUI: true
+                            regexValidation: '^01\d{9}$'
+                            displayName: رقم المحمول
 
-                      
-                    - name: otp
-                      type: number
-                      minLength: 6
-                      maxLength: 8
-                      shownInUI: true
-                      displayName: رمز التحقق
-                      isPersist: false
+                          - name: code
+                            type: string
+                            minLength: 4
+                            maxLength: 20
+                            shownInUI: true
+                            displayName: الكود
 
-                  
-                      
-                  - serviceProvider: orange
-                    codeType: voucher
-                    displayName: Orange Voucher
-                    icon: <icon_path>
-                    isPersist: true
-                    attributes:
-                    - name: mobileNumber
-                      type: string
-                      minLength: 11
-                      maxLength: 11
-                      shownInUI: true
-                      regexValidation: '^01\d{9}$'
-                      displayName: رقم المحمول
-                      isPersist: false
 
-                      
-                    - name: code
-                      type: string
-                      minLength: 4
-                      maxLength: 20
-                      shownInUI: true
-                      displayName: الكود
-                      isPersist: true
+                          - name: otp
+                            type: number
+                            minLength: 6
+                            maxLength: 8
+                            shownInUI: true
+                            displayName: رمز التحقق
+                      - serviceId: orangeCoupon5P
+                        displayName: Orange coupon 5%
+                        icon: <icon_path>
+                        attributes:
+                          - name: mobileNumber
+                            type: string
+                            minLength: 11
+                            maxLength: 11
+                            shownInUI: true
+                            regexValidation: '^01\d{9}$'
+                            displayName: رقم المحمول
 
-                      
-                    - name: otp
-                      type: number
-                      minLength: 6
-                      maxLength: 8
-                      shownInUI: true
-                      displayName: رمز التحقق
-                      isPersist: false
+                          - name: code
+                            type: string
+                            minLength: 4
+                            maxLength: 20
+                            shownInUI: true
+                            displayName: الكود
 
-                      
+                    vouchers:
+                      - serviceId: orangeVoucher100
+                        displayName: Orange voucher 100
+                        icon: <icon_path>
+                        attributes:
+                          - name: mobileNumber
+                            type: string
+                            minLength: 11
+                            maxLength: 11
+                            shownInUI: true
+                            regexValidation: '^01\d{9}$'
+                            displayName: رقم المحمول
+
+                          - name: code
+                            type: string
+                            minLength: 4
+                            maxLength: 20
+                            shownInUI: true
+                            displayName: الكود
+
+
+                          - name: otp
+                            type: number
+                            minLength: 6
+                            maxLength: 8
+                            shownInUI: true
+                            displayName: رمز التحقق
+
                   - serviceProvider: vodafone
-                    codeType: voucher
-                    displayName: Vodafone Voucher
-                    icon: <icon_path>
-                    isPersist: true
-                    attributes:
-                      - name: mobileNumber
-                        type: string
-                        minLength: 11
-                        maxLength: 11
-                        shownInUI: true
-                        regexValidation: '^01\d{9}$'
-                        displayName: رقم المحمول
-                        isPersist: true
+                    coupons:
+                      - serviceId: vodafoneCoupon50
+                        displayName: Vodafone coupon 50
+                        icon: <icon_path>
+                        attributes:
+                          - name: mobileNumber
+                            type: string
+                            minLength: 11
+                            maxLength: 11
+                            shownInUI: true
+                            regexValidation: '^01\d{9}$'
+                            displayName: رقم المحمول
 
-                        
-                      - name: code
-                        type: string
-                        minLength: 4
-                        maxLength: 20
-                        displayName: الكود
-                        isPersist: true
+                          - name: code
+                            type: string
+                            minLength: 4
+                            maxLength: 20
+                            shownInUI: true
+                            displayName: الكود
 
+                          - name: otp
+                            type: number
+                            minLength: 6
+                            maxLength: 8
+                            shownInUI: true
+                            displayName: رمز التحقق
 
-                  
-                  
+                    vouchers:
+                      -
+
         '401':
           $ref: '#/components/responses/UnauthorizedError'
-     
+
   /service/eligibilty:
     post:
       tags:
-       - service
+        - service
       summary: check wether the user is eligible to use an offer or validate a coupon code
       description: This service will be called with every transaction including voucher or coupon to validate the user's eligabilty to reedem the code
       operationId: checkUserEligibility
       parameters:
         - $ref: '#/components/parameters/storeCode'
         - $ref: '#/components/parameters/storePassword'
-      
+
       requestBody:
         description: Send all required parameters as input body that you are already aware of from the [GET] service
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/eligibilityRequest'
-              
-              
+
+
       responses:
         '200':
           description: successful operation
           content:
             application/json:
-              schema: 
-                  $ref: '#/components/schemas/eligibiltyResponse'
-                  
+              schema:
+                $ref: '#/components/schemas/eligibiltyResponse'
+
         '401':
           $ref: '#/components/responses/UnauthorizedError'
-         
-            
-          
-  
-components: 
+
+
+
+
+components:
   parameters:
     storeCode:
       name: storeCode
@@ -186,26 +198,17 @@ components:
       schema:
         type: string
   responses:
-      UnauthorizedError:
-        description: Authentication information is missing or invalid
-       
+    UnauthorizedError:
+      description: Authentication information is missing or invalid
+
   schemas:
     eligibilityRequest:
       type: object
       properties:
-        serviceProvider:
+        serviceId:
           type: string
-          enum:
-              - vodafone
-              - orange
-              - etisalat
-              - meeza
-        codeType:
-          type: string 
-          description: it can be "voucher" or "coupon"
-          enum:
-            - voucher
-            - coupon
+          description: contains the unique identifier for the chosen service
+          example: vodafoneCoupon50
         mobileNumber:
           type: string
           example: "01234567899"
@@ -215,20 +218,20 @@ components:
         otp:
           type: string
           example: "123456"
-        
-        
+
+
     eligibiltyResponse:
       type: object
       properties:
         status:
-           type: string
-           enum:
-                  - Eligible
-                  - AlreadyUsed
-                  - NotEligible
-           example: "NotEligible  || AlreadyUsed ||  Eligible"
-           description: it's a enum to have status of check eligiblity  it can be (Eligible ->  user eligible to use this code), (alreadyUsed ->  code used before.) or (notEligible ->  user  not eligible to use this code.)
-        
+          type: string
+          enum:
+            - Eligible
+            - AlreadyUsed
+            - NotEligible
+          example: "NotEligible  || AlreadyUsed ||  Eligible"
+          description: it's a enum to have status of check eligiblity  it can be (Eligible ->  user eligible to use this code), (alreadyUsed ->  code used before.) or (notEligible ->  user  not eligible to use this code.)
+
         statusMessage:
           type: string
           example: " يمكنك استخدام هذا الكود  ||   تم استخدام الكود من قبل  ||    هذا الكود غير صالح للاستخدام "
@@ -238,7 +241,7 @@ components:
           example: "voucherValue || discountPercentage || couponValue || bounsBuyGroup"
         maxDiscountAmount:
           type: number
-          description: highest ammount of money that can be deducted from the transtaction ex. dicount 15% up to 100 pounds 
+          description: highest ammount of money that can be deducted from the transtaction ex. dicount 15% up to 100 pounds
           example: 70
         minimumReceiptAmount:
           type: number
@@ -251,55 +254,83 @@ components:
         loyaltyEligibilityPercent:
           type: number
           example: 0.55 || 0.65 || 0.80
-          description: should be a fraction value between 0.0 to 1.0 
-    
+          description: should be a fraction value between 0.0 to 1.0
+
     servicesInfo:
-        type: object
-        properties:
-          serviceProvider: 
-            type: string
-            enum:
-                  - vodafone
-                  - orange
-                  - etisalat
-                  - meeza
-            example: orange
-          codeType:
-            type: string 
-            description: it can be "voucher" or "coupon"
-            enum:
-              - voucher
-              - coupon
-            example: coupon
-          isPersist:
-            type: boolean 
-            description: it it's a boolean to describe if this attribute will be a part of the unique identifier to be saved in Ivend database. so we can access the receipt Information ex. if both serviceProvider and code are assigned true it should be stored "serviceProvider#code"-> "orange#894566"
-          displayName:
-            type: string 
-            description: name to be displayed in UI
-            example: Orange
-          icon:
-            type: string 
-            description: icon path for the service
-          attributes:
-            type: array
-            items:
-              type: object
-              properties:
-                name:
-                  type: string
-                minLength:
-                  type: number
-                maxLength:
-                  type: number
-                shownInUI:
-                  type: boolean
-                regexValidation:
-                  type: string
-                displayName:
-                  type: string
-                isPersist:
-                  type: boolean
-                  description: it it's a boolean to describe if this attribute will be a part of the unique identifier to be saved in database ex. if both serviceProvider and code are assigned true it should be sorted "serviceProvider#code"-> "orange#894566"
-        
-   
+      type: object
+      properties:
+        serviceProvider:
+          type: string
+          enum:
+            - vodafone
+            - orange
+            - etisalat
+            - meeza
+        coupons:
+          type: array
+          description: list of all coupons for this service provider
+          items:
+            type: object
+            properties:
+              serviceId:
+                type: string
+                description: unique identifier for each service
+                example: Orange
+              displayName:
+                type: string
+                description: name to be displayed in UI
+                example: Orange
+              icon:
+                type: string
+                description: icon path for the service
+              attributes:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    minLength:
+                      type: number
+                    maxLength:
+                      type: number
+                    shownInUI:
+                      type: boolean
+                    regexValidation:
+                      type: string
+                    displayName:
+                      type: string
+        vouchers:
+          type: array
+          description: list of all vouchers for this service provider
+          items:
+            type: object
+            properties:
+              serviceId:
+                type: string
+                description: unique identifier for each service
+                example: Orange
+              displayName:
+                type: string
+                description: name to be displayed in UI
+                example: Orange
+              icon:
+                type: string
+                description: icon path for the service
+              attributes:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    minLength:
+                      type: number
+                    maxLength:
+                      type: number
+                    shownInUI:
+                      type: boolean
+                    regexValidation:
+                      type: string
+                    displayName:
+                      type: string
