@@ -43,7 +43,7 @@ paths:
                     codeType: coupon
                     displayName: Orange coupon
                     icon: <icon_path>
-                    isPresist: true
+                    isPersist: true
                     attributes:
                     - name: mobileNumber
                       type: string
@@ -52,7 +52,7 @@ paths:
                       shownInUI: true
                       regexValidation: '^01\d{9}$'
                       displayName: رقم المحمول
-                      isPresist: false
+                      isPersist: false
                       
                     - name: code
                       type: string
@@ -60,7 +60,7 @@ paths:
                       maxLength: 20
                       shownInUI: true
                       displayName: الكود
-                      isPresist: true
+                      isPersist: true
 
                       
                     - name: otp
@@ -69,7 +69,7 @@ paths:
                       maxLength: 8
                       shownInUI: true
                       displayName: رمز التحقق
-                      isPresist: false
+                      isPersist: false
 
                   
                       
@@ -77,7 +77,7 @@ paths:
                     codeType: voucher
                     displayName: Orange Voucher
                     icon: <icon_path>
-                    isPresist: true
+                    isPersist: true
                     attributes:
                     - name: mobileNumber
                       type: string
@@ -86,7 +86,7 @@ paths:
                       shownInUI: true
                       regexValidation: '^01\d{9}$'
                       displayName: رقم المحمول
-                      isPresist: false
+                      isPersist: false
 
                       
                     - name: code
@@ -95,7 +95,7 @@ paths:
                       maxLength: 20
                       shownInUI: true
                       displayName: الكود
-                      isPresist: true
+                      isPersist: true
 
                       
                     - name: otp
@@ -104,14 +104,14 @@ paths:
                       maxLength: 8
                       shownInUI: true
                       displayName: رمز التحقق
-                      isPresist: false
+                      isPersist: false
 
                       
                   - serviceProvider: vodafone
                     codeType: voucher
                     displayName: Vodafone Voucher
                     icon: <icon_path>
-                    isPresist: true
+                    isPersist: true
                     attributes:
                       - name: mobileNumber
                         type: string
@@ -120,7 +120,7 @@ paths:
                         shownInUI: true
                         regexValidation: '^01\d{9}$'
                         displayName: رقم المحمول
-                        isPresist: true
+                        isPersist: true
 
                         
                       - name: code
@@ -128,7 +128,7 @@ paths:
                         minLength: 4
                         maxLength: 20
                         displayName: الكود
-                        isPresist: true
+                        isPersist: true
 
 
                   
@@ -271,7 +271,7 @@ components:
               - voucher
               - coupon
             example: coupon
-          isPresist:
+          isPersist:
             type: boolean 
             description: it it's a boolean to describe if this attribute will be a part of the unique identifier to be saved in Ivend database. so we can access the receipt Information ex. if both serviceProvider and code are assigned true it should be stored "serviceProvider#code"-> "orange#894566"
           displayName:
@@ -298,7 +298,7 @@ components:
                   type: string
                 displayName:
                   type: string
-                isPresist:
+                isPersist:
                   type: boolean
                   description: it it's a boolean to describe if this attribute will be a part of the unique identifier to be saved in database ex. if both serviceProvider and code are assigned true it should be sorted "serviceProvider#code"-> "orange#894566"
         
