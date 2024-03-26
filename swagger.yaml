@@ -255,6 +255,11 @@ components:
           type: number
           example: 0.55 || 0.65 || 0.80
           description: should be a fraction value between 0.0 to 1.0
+        eligibilityId: 
+          type: string
+          example: eligibility0012345
+          description: unique identifier for each transaction, should be stored in User-Defined Table (UDT).
+          
 
     servicesInfo:
       type: object
