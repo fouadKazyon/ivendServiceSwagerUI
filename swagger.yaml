@@ -239,8 +239,8 @@ components:
           example: " يمكنك استخدام هذا الكود  ||   تم استخدام الكود من قبل  ||    هذا الكود غير صالح للاستخدام "
         couponOrVoucherKind:
           type: string
-          description:  it describes the meaning of the value contained in discountValue it can be one of those values "voucherValue", "discountPercentage", "bounsBuyGroup" or "couponValue"
-          example: "voucherValue || discountPercentage || couponValue || bounsBuyGroup"
+          description:  it describes the meaning of the value contained in discountValue it can be one of those values "voucherValue", "discountPercentage", "bounsBuyGroup", "voucherPercentage" or "couponValue"
+          example: "voucherValue || discountPercentage || couponValue || bounsBuyGroup || voucherPercentage"
         maxDiscountAmount:
           type: number
           description: highest ammount of money that can be deducted from the transtaction ex. dicount 15% up to 100 pounds
@@ -252,7 +252,7 @@ components:
         discountValue:
           type: string
           description: can hold one of those 4 values types accornding to the type mentioned in couponOrVoucherKind
-          example: "10 || 0.4 || 0.65 || bonusBuyGroup1"
+          example: "10 || 0.4 || 0.65 || bonusBuyGroup1 || 0.45"
         loyaltyEligibilityPercent:
           type: number
           example: 0.55 || 0.65 || 0.80
