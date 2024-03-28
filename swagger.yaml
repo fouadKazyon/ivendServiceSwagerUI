@@ -155,7 +155,7 @@ paths:
       tags:
         - service
       summary: check wether the user is eligible to use an offer or validate a coupon code
-      description: This service will be called with every transaction including voucher or coupon to validate the user's eligabilty to reedem the code
+      description: This service will be called with every transaction including one or more vouchers or coupons to validate the user's eligabilty to reedem these codes, the api takes an array of objects each object contains all the required data about one voucher or coupon in the example we show a request containing one coupon, in case of multible coupons or vouchers the array will contain multible object each containing the required attributes for this coupon or voucher so the objects don't have to be similar. The response will be an array containing same number of objects as the request. the objects in the response will all have the same attributes as shown in example but different values.
       operationId: checkUserEligibility
       parameters:
         - $ref: '#/components/parameters/storeCode'
@@ -166,7 +166,9 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/eligibilityRequest'
+              type: array
+              items:
+                $ref: '#/components/schemas/eligibilityRequest'
 
 
       responses:
@@ -175,7 +177,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/eligibiltyResponse'
+                type: array
+                items:
+                  $ref: '#/components/schemas/eligibiltyResponse'
 
         '401':
           $ref: '#/components/responses/UnauthorizedError'
@@ -225,6 +229,10 @@ components:
     eligibiltyResponse:
       type: object
       properties:
+        serviceId:
+          type: string
+          description: contains the unique identifier for the chosen service
+          example: vodafoneCoupon50
         status:
           type: string
           enum:
