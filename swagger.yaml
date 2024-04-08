@@ -247,8 +247,8 @@ components:
           example: " يمكنك استخدام هذا الكود  ||   تم استخدام الكود من قبل  ||    هذا الكود غير صالح للاستخدام "
         couponOrVoucherKind:
           type: string
-          description:  it describes the meaning of the value contained in discountValue it can be one of those values "voucherValue", "discountPercentage", "bounsBuyGroup", "voucherPercentage" or "couponValue"
-          example: "voucherValue || discountPercentage || couponValue || bounsBuyGroup || voucherPercentage"
+          description:  it describes the meaning of the value contained in discountValue it can be one of those values "voucherValue", "discountPercentage", "bonusBuyGroup", "voucherPercentage" or "couponValue"
+          example: "voucherValue || discountPercentage || couponValue || bonusBuyGroup || voucherPercentage"
         maxDiscountAmount:
           type: number
           description: highest ammount of money that can be deducted from the transtaction ex. dicount 15% up to 100 pounds
