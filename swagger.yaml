@@ -239,12 +239,17 @@ components:
             - Eligible
             - AlreadyUsed
             - NotEligible
-          example: "NotEligible  || AlreadyUsed ||  Eligible"
-          description: it's a enum to have status of check eligiblity  it can be (Eligible ->  user eligible to use this code), (alreadyUsed ->  code used before.) or (notEligible ->  user  not eligible to use this code.)
+          example: "NotEligible  || AlreadyUsed ||  Eligible || NotValid"
+          description: it's a enum to have status of check eligiblity  it can be (Eligible ->  user eligible to use this code), (alreadyUsed ->  code used before.) or (notEligible ->  user  not eligible to use this code.), (NotValid -> some inputs failed in validation and reason of validation will be in statusMessageDetails)
 
         statusMessage:
           type: string
           example: " يمكنك استخدام هذا الكود  ||   تم استخدام الكود من قبل  ||    هذا الكود غير صالح للاستخدام "
+          description: it is description for user to be shown in screen if needed
+        statusMessageDetails:
+          type: string
+          example: "user eligible to use this code || user not eligible to use this code || code used before"
+          description: it is description for developer descripe the status of Eligibility
         couponOrVoucherKind:
           type: string
           description:  it describes the meaning of the value contained in discountValue it can be one of those values "voucherValue", "discountPercentage", "bonusBuyGroup", "voucherPercentage" or "couponValue"
