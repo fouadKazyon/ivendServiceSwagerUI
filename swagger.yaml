@@ -150,6 +150,7 @@ paths:
         '401':
           $ref: '#/components/responses/UnauthorizedError'
 
+
   /service/eligibilty:
     post:
       tags:
@@ -157,6 +158,40 @@ paths:
       summary: check wether the user is eligible to use an offer or validate a coupon code
       description: This service will be called with every transaction including one or more vouchers or coupons to validate the user's eligabilty to reedem these codes, the api takes an array of objects each object contains all the required data about one voucher or coupon in the example we show a request containing one coupon, in case of multible coupons or vouchers the array will contain multible object each containing the required attributes for this coupon or voucher so the objects don't have to be similar. The response will be an array containing same number of objects as the request. the objects in the response will all have the same attributes as shown in example but different values.
       operationId: checkUserEligibility
+      parameters:
+        - $ref: '#/components/parameters/storeCode'
+        - $ref: '#/components/parameters/storePassword'
+
+      requestBody:
+        description: Send all required parameters as input body that you are already aware of from the [GET] service
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/eligibilityRequest'
+
+
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/eligibiltyResponse'
+
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+          
+  /service/eligibilty-sku:
+    post:
+      tags:
+        - service
+      summary: check wether the user is eligible to use an offer or validate a coupon code with list of SKUs
+      description:  this serveice will be the same like /service/eligibilty but eligibilty-sku will require an extra attribute, hat will be list of SKUs that exist in receipt. it will be mandatory list for any service Id or name.
+      operationId: checkUserEligibilityWithSKUs
       parameters:
         - $ref: '#/components/parameters/storeCode'
         - $ref: '#/components/parameters/storePassword'
@@ -224,8 +259,18 @@ components:
         otp:
           type: string
           example: "123456"
+        sku:
+          type: array
+          items: 
+            type: string
+          example:
+              - "12540005511489"
+              - "12540005511490"
+              - "12540005511491"
+          
 
-
+  
+      
     eligibiltyResponse:
       type: object
       properties:
