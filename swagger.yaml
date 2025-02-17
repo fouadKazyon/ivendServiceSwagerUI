@@ -200,10 +200,8 @@ paths:
         description: Send all required parameters as input body that you are already aware of from the [GET] service
         content:
           application/json:
-            schema:
-              type: array
-              items:
-                $ref: '#/components/schemas/eligibilityRequest'
+            schema: 
+              $ref: '#/components/schemas/eligibilityRequestSku'
 
 
       responses:
@@ -212,9 +210,38 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/eligibiltyResponse'
+               
+                  $ref: '#/components/schemas/eligibiltyResponseSku'
+
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /service/confirm:
+    post:
+      tags:
+        - service
+      summary: this api will be called once the payment completed it will be for all skus  
+      description: api require eligibilityTransactionId and this will be returned from /service/eligibilty-sku endpoint, and also require all skus of the invoice even the skus not included in the discount. 
+      operationId: confirmOnComplete
+      parameters:
+        - $ref: '#/components/parameters/storeCode'
+        - $ref: '#/components/parameters/storePassword'
+
+      requestBody:
+        description: Send all required parameters as input body that you are already aware of from the [GET] service
+        content:
+          application/json:
+            schema: 
+              $ref: '#/components/schemas/confirmRequest'
+
+
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+               
+                  $ref: '#/components/schemas/confirmResponse'
 
         '401':
           $ref: '#/components/responses/UnauthorizedError'
@@ -243,6 +270,72 @@ components:
       description: Authentication information is missing or invalid
 
   schemas:
+    confirmRequest:
+      type: object
+      properties:
+        transactionType:
+          type: string
+          example: "COMPLETED | RETURNED"
+          description: this enumn will be (COMPLETED -> this will be to confirm  on SKU that are exist in this  eligibilityTransactionId is completed ), (RETURNED ->  this will be to confirm  on SKU that are exist in this  eligibilityTransactionId is refunded or invoice did not completed )
+            
+        serviceId: 
+          type: string
+          example: "280"
+          description: string value will be returned from the first api
+        mobileNumber:
+          type: string
+          example: "01234567899"
+        ivendtransactionkey:
+          type: string
+          example: "322000000000980103"
+        applieddiscountamount:
+          type: number
+          example: 155.5
+        eligibilityTransactionId:
+          type: string
+          example: "200125"
+             
+        skus:
+          type: array
+          items:
+            type: string
+          example:
+              - "564654000112"
+              - "564654000112"
+              - "564654000112"
+              - "564654000112"
+              - "564654000112"
+    confirmResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          description: this will be status for confirmation,(CONFIRMED -> thats indicator the transaction confirmed), (ALREADY_CONFIRMED -> this treansaction id already confirmed), (NOT_EXIST -> this transaction id not found) 
+          example: "CONFIRMED | ALREADY_CONFIRMED | NOT_EXIST"
+        message:
+          type: string
+          example: "Transactions confirmed | transactions Already confirmed | transactions not found"
+    eligibilityRequestSku:
+      type: object 
+      properties:
+        mobileNumber:
+          type: string
+          example: "01234567899"
+        item:
+          type: object
+          properties:
+            sku:
+              type: string
+              example: "4500001235145"
+              description: sku for product, this will be string    
+            quantity:
+              type: integer
+              description: quantity for item , this will be intger  
+              example: 2
+   
+        
+           
+           
     eligibilityRequest:
       type: object
       properties:
@@ -270,7 +363,55 @@ components:
           
 
   
-      
+    eligibiltyResponseSku:
+      type: object
+      properties:
+        serviceId:
+          type: string
+          description: contains the unique identifier for the chosen service
+          example: 280
+        status:
+          type: string
+          enum:
+            - Eligible
+            - AlreadyUsed
+            - NotEligible
+          example: "NOT_ELIGIBLE  || ALREADY_USED ||  ELIGIBLE || NOT_VALID || OUT_OF_STOCK "
+          description: it's a enum to have status of check eligiblity  it can be (ELIGIBLE ->  user eligible to get discount), (ALREADY_USED ->  user Already used offer.) or (NOT_ELIGIBLE -> user not eligible for this offer ), (NOT_VALID -> some inputs failed in validation and reason of validation will be in statusMessageDetails), (OUT_OF_STOCK -> stock is not enough for this sku)
+
+        statusMessage:
+          type: string
+          example: "رقم الهاتف غير مسموح له الاستخدام | رقم الهاتف مستخدم من قبل| تم نفاذ الكميه لهذا المنتج"
+          description: it is description for user to be shown in screen if needed
+        statusMessageDetails:
+          type: string
+          example: "out of stock.  || Mobile number already used || رقم الهاتف غير مسموح له الاستخدام"
+          description: it is description for developer descripe the status of Eligibility
+        couponOrVoucherKind:
+          type: string
+          description:  it describes the meaning of the value contained in discountValue it can be one of those values "voucherValue", "discountPercentage", "bonusBuyGroup", "voucherPercentage" or "couponValue"
+          example: "voucherValue || discountPercentage || couponValue || bonusBuyGroup || voucherPercentage"
+        maxDiscountAmount:
+          type: number
+          description: highest ammount of money that can be deducted from the transtaction ex. dicount 15% up to 100 pounds
+          example: 70
+        minimumReceiptAmount:
+          type: number
+          description: the minimum ammount of money of the receipt for the discount to be eligable
+          example: 250
+        discountValue:
+          type: string
+          description: can hold one of those 4 values types accornding to the type mentioned in couponOrVoucherKind
+          example: "10 || 0.4 || 0.65 || bonusBuyGroup1 || 0.45"
+        loyaltyEligibilityPercent:
+          type: number
+          example: 0.55 || 0.65 || 0.80
+          description: should be a fraction value between 0.0 to 1.0
+        eligibilityTransactionId:
+          type: string
+          example: 4521001
+          description: unique identifier for each transaction, should be stored in User-Defined Table (UDT).
+
     eligibiltyResponse:
       type: object
       properties:
