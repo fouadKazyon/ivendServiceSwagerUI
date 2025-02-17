@@ -155,7 +155,7 @@ paths:
     post:
       tags:
         - service
-      summary: check wether the user is eligible to use an offer or validate a coupon code
+      summary: check wether the user is eligible to use an offer or validate a coupon code (for kazyon services only that already exist)
       description: This service will be called with every transaction including one or more vouchers or coupons to validate the user's eligabilty to reedem these codes, the api takes an array of objects each object contains all the required data about one voucher or coupon in the example we show a request containing one coupon, in case of multible coupons or vouchers the array will contain multible object each containing the required attributes for this coupon or voucher so the objects don't have to be similar. The response will be an array containing same number of objects as the request. the objects in the response will all have the same attributes as shown in example but different values.
       operationId: checkUserEligibility
       parameters:
@@ -275,8 +275,8 @@ components:
       properties:
         transactionType:
           type: string
-          example: "COMPLETED | RETURNED"
-          description: this enumn will be (COMPLETED -> this will be to confirm  on SKU that are exist in this  eligibilityTransactionId is completed ), (RETURNED ->  this will be to confirm  on SKU that are exist in this  eligibilityTransactionId is refunded or invoice did not completed )
+          example: "TRANSACTED | VOIDED | REFUNDED"
+          description: this enumn will be (TRANSACTED -> this will be to confirm  on SKU that are exist in this  eligibilityTransactionId is completed ), ( [ REFUNDED, VOIDED ] ->  this will be to confirm  on SKU that are exist in this  eligibilityTransactionId is refunded or invoice did not completed )
             
         serviceId: 
           type: string
@@ -285,18 +285,25 @@ components:
         mobileNumber:
           type: string
           example: "01234567899"
-        ivendtransactionkey:
+        ivendTransactionKey:
           type: string
           example: "322000000000980103"
-        applieddiscountamount:
+        appliedDiscountAmount:
           type: number
           example: 155.5
+        ivendTransactionId:
+          type: string
+          example: "SA2038000037450"
         eligibilityTransactionId:
           type: string
           example: "200125"
+        transactionTotalAmount:
+          type: number
+          example: 250.6
              
         skus:
           type: array
+          description: array of all skus of final invoice (skus eligible for discount and normal sku).
           items:
             type: string
           example:
@@ -370,6 +377,13 @@ components:
           type: string
           description: contains the unique identifier for the chosen service
           example: 280
+        sku:
+          type: string 
+          example: "4500001235145"
+        maxQuantity: 
+          type: number
+          example: 2
+          description: this will be max quantity that are allowed for this check
         status:
           type: string
           enum:
