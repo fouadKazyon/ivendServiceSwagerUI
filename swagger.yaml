@@ -202,6 +202,16 @@ paths:
           application/json:
             schema: 
               $ref: '#/components/schemas/eligibilityRequestSku'
+            example: 
+              mobileNumber: "01234567891"
+              items:
+                - sku: "1200005621653"
+                  quantity: "2"
+                - sku: "56400000212"
+                  quantity: "3"
+                - sku: "113000684654"
+                  quantity: "2"
+                
 
 
       responses:
@@ -209,9 +219,35 @@ paths:
           description: successful operation
           content:
             application/json:
-              schema:
-               
+              schema: 
                   $ref: '#/components/schemas/eligibiltyResponseSku'
+              example:   
+                  - serviceId: "570"
+                    sku: "1200005621653"
+                    maxQuantity: "2"
+                    status : "ELIGIBLE"
+                    statusMessage : "الرقم مسموح له ااستخدام"
+                    statusMessageDetails : "user eligible"
+                    eligibilityTransactionId : "554541"
+                    
+                  - serviceId: "650"
+                    sku: "1200005621654"
+                    maxQuantity: "0"
+                    status : "NOT_ELIGIBLE"
+                    statusMessage : "الرقم غير مسموح له الاستخدام"
+                    statusMessageDetails : "user not eligible"
+                    eligibilityTransactionId : "5552105"
+                    
+                  - serviceId: "640"
+                    sku: "1200005621653"
+                    maxQuantity: "0"
+                    status : "OUT_OF_STOCK"
+                    statusMessage : "تم نفاذ الكميه لهذا المنتج "
+                    statusMessageDetails : "out of stock"
+                    eligibilityTransactionId : "5242104"
+                
+                  
+                  
 
         '401':
           $ref: '#/components/responses/UnauthorizedError'
@@ -232,6 +268,8 @@ paths:
           application/json:
             schema: 
               $ref: '#/components/schemas/confirmRequest'
+            
+          
 
 
       responses:
@@ -242,6 +280,16 @@ paths:
               schema:
                
                   $ref: '#/components/schemas/confirmResponse'
+              example:   
+                - status: "CONFIRMED"
+                  message: "Transactions confirmed"
+                  eligibilityTransactionId: "22135"
+                  serviceId: "4564"
+                  
+                - status: "ALREADY_CONFIRMED"
+                  message: " transactions Already confirmed"
+                  eligibilityTransactionId: "2835"
+                  serviceId: "4224"
 
         '401':
           $ref: '#/components/responses/UnauthorizedError'
@@ -273,15 +321,8 @@ components:
     confirmRequest:
       type: object
       properties:
-        transactionType:
-          type: string
-          example: "TRANSACTED | VOIDED | REFUNDED"
-          description: this enumn will be (TRANSACTED -> this will be to confirm  on SKU that are exist in this  eligibilityTransactionId is completed ), ( [ REFUNDED, VOIDED ] ->  this will be to confirm  on SKU that are exist in this  eligibilityTransactionId is refunded or invoice did not completed )
-            
-        serviceId: 
-          type: string
-          example: "280"
-          description: string value will be returned from the first api
+        
+        
         mobileNumber:
           type: string
           example: "01234567899"
@@ -290,17 +331,50 @@ components:
           example: "322000000000980103"
         appliedDiscountAmount:
           type: number
-          example: 155.5
+          example: 300
         ivendTransactionId:
           type: string
           example: "SA2038000037450"
-        eligibilityTransactionId:
-          type: string
-          example: "200125"
+        
         transactionTotalAmount:
           type: number
-          example: 250.6
-             
+          example: 1000
+          
+        confirmList:
+            type: array
+            items:
+              type: object
+              properties:
+                serviceId: 
+                  type: string
+                  example: "280"
+                  description: string value will be returned from the first api
+                
+                appliedDiscountAmountPerItem:
+                  type: string
+                  example: "20"
+                eligibilityTransactionId:
+                  type: string
+                  example: "200125"
+                transactionType:
+                  type: string
+                  example: "TRANSACTED | VOIDED | REFUNDED"
+                  description: this enumn will be (TRANSACTED -> this will be to confirm  on SKU that are exist in this  eligibilityTransactionId is completed ), ( [ REFUNDED, VOIDED ] ->  this will be to confirm  on SKU that are exist in this  eligibilityTransactionId is refunded or invoice did not completed )
+            example : 
+            
+              - serviceId: "570"
+                appliedDiscountAmountPerItem: "100"
+                eligibilityTransactionId : "5649"
+                transactionType : "TRANSACTED"
+              - serviceId: "650"
+                appliedDiscountAmountPerItem: "100"
+                eligibilityTransactionId : "5648"
+                transactionType : "TRANSACTED"
+              - serviceId: "640"
+                appliedDiscountAmountPerItem: "100"
+                eligibilityTransactionId : "5647"
+                transactionType : "TRANSACTED"  
+              
         skus:
           type: array
           description: array of all skus of final invoice (skus eligible for discount and normal sku).
@@ -308,39 +382,83 @@ components:
             type: string
           example:
               - "564654000112"
-              - "564654000112"
-              - "564654000112"
-              - "564654000112"
-              - "564654000112"
+              - "564654000113"
+              - "564654000114"
+              - "564654000115"
+              - "564654000116"
     confirmResponse:
-      type: object
+     
+      items : 
+         type: array
       properties:
+        
         status:
           type: string
           description: this will be status for confirmation,(CONFIRMED -> thats indicator the transaction confirmed), (ALREADY_CONFIRMED -> this treansaction id already confirmed), (NOT_EXIST -> this transaction id not found) 
           example: "CONFIRMED | ALREADY_CONFIRMED | NOT_EXIST"
+        serviceId:
+          type: string
+        eligibilityTransactionId:
+          type: string
         message:
           type: string
           example: "Transactions confirmed | transactions Already confirmed | transactions not found"
+    
     eligibilityRequestSku:
-      type: object 
+      type: object
       properties:
         mobileNumber:
           type: string
           example: "01234567899"
-        item:
-          type: object
-          properties:
-            sku:
-              type: string
-              example: "4500001235145"
-              description: sku for product, this will be string    
-            quantity:
-              type: integer
-              description: quantity for item , this will be intger  
-              example: 2
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              sku:
+                type: string
+                description: SKU for product, this will be a string    
+              quantity:
+                type: integer
+                description: Quantity for item, this will be an integer  
+      
+
    
-        
+    eligibiltyResponseSku:
+      type: object
+      properties:
+        serviceId:
+          type: string
+          description: contains the unique identifier for the chosen service
+          example: 280
+        sku:
+          type: string 
+          example: "4500001235145"
+        maxQuantity: 
+          type: number
+          example: 2
+          description: this will be max quantity that are allowed for this check
+        status:
+          type: string
+          enum:
+            - Eligible
+            - AlreadyUsed
+            - NotEligible
+          example: "NOT_ELIGIBLE  || ALREADY_USED ||  ELIGIBLE || NOT_VALID || OUT_OF_STOCK "
+          description: it's a enum to have status of check eligiblity  it can be (ELIGIBLE ->  user eligible to get discount), (ALREADY_USED ->  user Already used offer.) or (NOT_ELIGIBLE -> user not eligible for this offer ), (NOT_VALID -> some inputs failed in validation and reason of validation will be in statusMessageDetails), (OUT_OF_STOCK -> stock is not enough for this sku) 
+        statusMessage:
+          type: string
+          example: "رقم الهاتف غير مسموح له الاستخدام | رقم الهاتف مستخدم من قبل| تم نفاذ الكميه لهذا المنتج"
+          description: it is description for user to be shown in screen if needed
+        statusMessageDetails:
+          type: string
+          example: "out of stock.  || Mobile number already used || رقم الهاتف غير مسموح له الاستخدام"
+          description: it is description for developer descripe the status of Eligibility
+        eligibilityTransactionId:
+          type: string
+          example: 4521001
+          description: unique identifier for each transaction, should be stored in User-Defined Table (UDT).
+
            
            
     eligibilityRequest:
@@ -370,62 +488,7 @@ components:
           
 
   
-    eligibiltyResponseSku:
-      type: object
-      properties:
-        serviceId:
-          type: string
-          description: contains the unique identifier for the chosen service
-          example: 280
-        sku:
-          type: string 
-          example: "4500001235145"
-        maxQuantity: 
-          type: number
-          example: 2
-          description: this will be max quantity that are allowed for this check
-        status:
-          type: string
-          enum:
-            - Eligible
-            - AlreadyUsed
-            - NotEligible
-          example: "NOT_ELIGIBLE  || ALREADY_USED ||  ELIGIBLE || NOT_VALID || OUT_OF_STOCK "
-          description: it's a enum to have status of check eligiblity  it can be (ELIGIBLE ->  user eligible to get discount), (ALREADY_USED ->  user Already used offer.) or (NOT_ELIGIBLE -> user not eligible for this offer ), (NOT_VALID -> some inputs failed in validation and reason of validation will be in statusMessageDetails), (OUT_OF_STOCK -> stock is not enough for this sku)
-
-        statusMessage:
-          type: string
-          example: "رقم الهاتف غير مسموح له الاستخدام | رقم الهاتف مستخدم من قبل| تم نفاذ الكميه لهذا المنتج"
-          description: it is description for user to be shown in screen if needed
-        statusMessageDetails:
-          type: string
-          example: "out of stock.  || Mobile number already used || رقم الهاتف غير مسموح له الاستخدام"
-          description: it is description for developer descripe the status of Eligibility
-        couponOrVoucherKind:
-          type: string
-          description:  it describes the meaning of the value contained in discountValue it can be one of those values "voucherValue", "discountPercentage", "bonusBuyGroup", "voucherPercentage" or "couponValue"
-          example: "voucherValue || discountPercentage || couponValue || bonusBuyGroup || voucherPercentage"
-        maxDiscountAmount:
-          type: number
-          description: highest ammount of money that can be deducted from the transtaction ex. dicount 15% up to 100 pounds
-          example: 70
-        minimumReceiptAmount:
-          type: number
-          description: the minimum ammount of money of the receipt for the discount to be eligable
-          example: 250
-        discountValue:
-          type: string
-          description: can hold one of those 4 values types accornding to the type mentioned in couponOrVoucherKind
-          example: "10 || 0.4 || 0.65 || bonusBuyGroup1 || 0.45"
-        loyaltyEligibilityPercent:
-          type: number
-          example: 0.55 || 0.65 || 0.80
-          description: should be a fraction value between 0.0 to 1.0
-        eligibilityTransactionId:
-          type: string
-          example: 4521001
-          description: unique identifier for each transaction, should be stored in User-Defined Table (UDT).
-
+    
     eligibiltyResponse:
       type: object
       properties:
