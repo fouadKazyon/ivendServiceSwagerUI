@@ -189,8 +189,8 @@ paths:
     post:
       tags:
         - service
-      summary: check wether the user is eligible to use an offer or validate a coupon code with list of SKUs
-      description:  this serveice will be the same like /service/eligibilty but eligibilty-sku will require an extra attribute, hat will be list of SKUs that exist in receipt. it will be mandatory list for any service Id or name.
+      summary: check wether the user is eligible to use an offer with list of SKUs
+      description:  this serveice will be the same like /service/eligibilty but eligibilty-sku list will require an extra attribute, that will be list of SKUs that exist in receipt. it will be mandatory list for any service Id or name.
       operationId: checkUserEligibilityWithSKUs
       parameters:
         - $ref: '#/components/parameters/storeCode'
@@ -256,7 +256,7 @@ paths:
       tags:
         - service
       summary: this api will be called once the payment completed it will be for all skus  
-      description: api require eligibilityTransactionId and this will be returned from /service/eligibilty-sku endpoint, and also require all skus of the invoice even the skus not included in the discount. 
+      description: api require eligibilityTransactionId per each sku and this will be returned from /service/eligibilty-sku endpoint, and also require all skus of the invoice even the skus not included in the discount. 
       operationId: confirmOnComplete
       parameters:
         - $ref: '#/components/parameters/storeCode'
@@ -412,6 +412,7 @@ components:
           example: "01234567899"
         items:
           type: array
+          description: list of sku items should include sku id and quantity for this sku
           items:
             type: object
             properties:
@@ -426,6 +427,7 @@ components:
    
     eligibiltyResponseSku:
       type: object
+      description: Every object contains an SKU ID that is sent in the payload, and the other attributes in this object are related to this SKU
       properties:
         serviceId:
           type: string
