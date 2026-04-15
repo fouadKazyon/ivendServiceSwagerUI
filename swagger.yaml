@@ -172,6 +172,9 @@ paths:
                       - serviceId: vodafoneCoupon50
                         displayName: Vodafone coupon 50
                         icon: <icon_path>
+                        isRetryable: true
+                        retryCount: 3
+                        retryInterval: 3000
                         attributes:
                           - name: mobileNumber
                             type: string
