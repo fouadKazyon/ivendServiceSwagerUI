@@ -336,6 +336,10 @@ components:
           type: string
           description: contains the unique identifier for the chosen service
           example: vodafoneCoupon50
+        isRetry:
+          type: boolean
+          description: not shown in ui and set to false if the user is sending the request and set to true if ivend resending the request in the retry process
+          example: false
         mobileNumber:
           type: string
           example: "01234567899"
