@@ -172,9 +172,6 @@ paths:
                       - serviceId: vodafoneCoupon50
                         displayName: Vodafone coupon 50
                         icon: <icon_path>
-                        isRetryable: true
-                        retryCount: 3
-                        retryInterval: 3000
                         attributes:
                           - name: mobileNumber
                             type: string
@@ -262,6 +259,48 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
 
 
+  /service/confirm:
+    post:
+      tags:
+        - service
+      summary: this api will be called once the payment completed it will be for all skus
+      description: api require eligibilityTransactionId per each sku and this will be returned from /service/eligibilty-sku endpoint, and also require all skus of the invoice even the skus not included in the discount.
+      operationId: confirmOnComplete
+      parameters:
+        - $ref: '#/components/parameters/storeCode'
+        - $ref: '#/components/parameters/storePassword'
+
+      requestBody:
+        description: Send all required parameters as input body that you are already aware of from the [GET] service
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/confirmRequest'
+
+
+
+
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+
+                $ref: '#/components/schemas/confirmResponse'
+              example:
+                - status: "CONFIRMED"
+                  message: "Transactions confirmed"
+                  eligibilityTransactionId: "22135"
+                  serviceId: "4564"
+
+                - status: "ALREADY_CONFIRMED"
+                  message: " transactions Already confirmed"
+                  eligibilityTransactionId: "2835"
+                  serviceId: "4224"
+
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
 
 
 components:
@@ -285,6 +324,92 @@ components:
       description: Authentication information is missing or invalid
 
   schemas:
+    confirmRequest:
+      type: object
+      properties:
+
+
+        mobileNumber:
+          type: string
+          example: "01234567899"
+        ivendTransactionKey:
+          type: string
+          example: "322000000000980103"
+        appliedDiscountAmount:
+          type: number
+          example: 300
+        ivendTransactionId:
+          type: string
+          example: "SA2038000037450"
+
+        transactionTotalAmount:
+          type: number
+          example: 1000
+
+        confirmList:
+          type: array
+          items:
+            type: object
+            properties:
+              serviceId:
+                type: string
+                example: "280"
+                description: string value will be returned from the first api
+
+              appliedDiscountAmountPerItem:
+                type: string
+                example: "20"
+              eligibilityTransactionId:
+                type: string
+                example: "200125"
+              transactionType:
+                type: string
+                example: "TRANSACTED | VOIDED | REFUNDED"
+                description: this enumn will be (TRANSACTED -> this will be to confirm  on SKU that are exist in this  eligibilityTransactionId is completed ), ( [ REFUNDED, VOIDED ] ->  this will be to confirm  on SKU that are exist in this  eligibilityTransactionId is refunded or invoice did not completed )
+          example :
+
+            - serviceId: "570"
+              appliedDiscountAmountPerItem: "100"
+              eligibilityTransactionId : "5649"
+              transactionType : "TRANSACTED"
+            - serviceId: "650"
+              appliedDiscountAmountPerItem: "100"
+              eligibilityTransactionId : "5648"
+              transactionType : "TRANSACTED"
+            - serviceId: "640"
+              appliedDiscountAmountPerItem: "100"
+              eligibilityTransactionId : "5647"
+              transactionType : "TRANSACTED"
+
+        skus:
+          type: array
+          description: array of all skus of final invoice (skus eligible for discount and normal sku).
+          items:
+            type: string
+          example:
+            - "564654000112"
+            - "564654000113"
+            - "564654000114"
+            - "564654000115"
+            - "564654000116"
+    confirmResponse:
+
+      items :
+        type: array
+      properties:
+
+        status:
+          type: string
+          description: this will be status for confirmation,(CONFIRMED -> thats indicator the transaction confirmed), (ALREADY_CONFIRMED -> this treansaction id already confirmed), (NOT_EXIST -> this transaction id not found)
+          example: "CONFIRMED | ALREADY_CONFIRMED | NOT_EXIST"
+        serviceId:
+          type: string
+        eligibilityTransactionId:
+          type: string
+        message:
+          type: string
+          example: "Transactions confirmed | transactions Already confirmed | transactions not found"
+
     serviceDto:
       type: object
       properties:
@@ -336,10 +461,6 @@ components:
           type: string
           description: contains the unique identifier for the chosen service
           example: vodafoneCoupon50
-        isRetry:
-          type: boolean
-          description: not shown in ui and set to false if the user is sending the request and set to true if ivend resending the request in the retry process
-          example: false
         mobileNumber:
           type: string
           example: "01234567899"
@@ -426,3 +547,4 @@ components:
           description: list of all vouchers for this service provider
           items:
             $ref: '#/components/schemas/serviceDto'
+
