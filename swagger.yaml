@@ -512,6 +512,10 @@ components:
           type: string
           description: can hold one of those 4 values types accornding to the type mentioned in couponOrVoucherKind
           example: "10 || 0.4 || 0.65 || bonusBuyGroup1 || 0.45"
+        sku:
+          type: string
+          description: can hold the sku for cash out
+          example: "110000059"
         loyaltyEligibilityPercent:
           type: number
           example: 0.55 || 0.65 || 0.80
