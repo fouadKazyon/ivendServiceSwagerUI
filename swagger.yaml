@@ -364,8 +364,8 @@ components:
                 example: "200125"
               transactionType:
                 type: string
-                example: "TRANSACTED | VOIDED | REFUNDED"
-                description: this enumn will be (TRANSACTED -> this will be to confirm  on SKU that are exist in this  eligibilityTransactionId is completed ), ( [ REFUNDED, VOIDED ] ->  this will be to confirm  on SKU that are exist in this  eligibilityTransactionId is refunded or invoice did not completed )
+                example: "TRANSACTED | VOIDED | REFUNDED | ERROR"
+                description: this enumn will be (TRANSACTED -> this will be to confirm  on SKU that are exist in this  eligibilityTransactionId is completed ), ( [ REFUNDED, VOIDED ] ->  this will be to confirm  on SKU that are exist in this  eligibilityTransactionId is refunded or invoice did not completed ), (ERROR -> This will be to confirm that there was an error during the transaction that led to the discount/transaction not being completed )
           example :
 
             - serviceId: "570"
